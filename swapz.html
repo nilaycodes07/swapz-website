@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Swapz — Your next fit is already on campus</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Nunito+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --yellow: #FFCA2E;
+  --orange: #FF7A30;
+  --deep-orange: #F5602A;
+  --cream: #FFF8EE;
+  --ink: #2C1A0E;
+  --muted: rgba(44,26,14,0.55);
+  --nav-bg: rgba(255,245,225,0.88);
+  --green: #2DB84B;
+  --red: #E03030;
+  --blue: #3B7EE8;
+  --grad: linear-gradient(175deg, #FFCA2E 0%, #FF8C38 50%, #FF6030 100%);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Nunito Sans', sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+  overflow-x: hidden;
+}
+
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 36px;
+  background: var(--nav-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255,140,60,0.18);
+}
+
+.logo {
+  font-family: 'Nunito', sans-serif;
+  font-size: 26px; font-weight: 900;
+  background: var(--grad);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+nav ul { display: flex; gap: 28px; list-style: none; }
+nav a { text-decoration: none; color: var(--ink); font-size: 14px; font-weight: 600; transition: opacity 0.2s; }
+nav a:hover { opacity: 0.55; }
+
+.nav-cta {
+  background: var(--grad);
+  color: white !important;
+  padding: 10px 22px;
+  border-radius: 100px;
+  font-weight: 800 !important;
+  box-shadow: 0 4px 16px rgba(245,96,42,0.35);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.nav-cta:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(245,96,42,0.45); opacity: 1 !important; }
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  background: var(--grad);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 130px 24px 80px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.bubble { position: absolute; border-radius: 50%; background: rgba(255,255,255,0.08); pointer-events: none; }
+.b1 { width: 420px; height: 420px; top: -100px; right: -100px; }
+.b2 { width: 260px; height: 260px; bottom: 60px; left: -70px; }
+.b3 { width: 130px; height: 130px; top: 32%; right: 7%; }
+
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,0.2);
+  border: 1.5px solid rgba(255,255,255,0.4);
+  border-radius: 100px;
+  padding: 7px 18px;
+  font-size: 13px; font-weight: 700; color: white;
+  margin-bottom: 26px;
+  backdrop-filter: blur(8px);
+  animation: fadeUp 0.5s ease both;
+}
+
+.live-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #AEFF7A;
+  box-shadow: 0 0 0 3px rgba(174,255,122,0.3);
+  animation: ping 1.5s infinite;
+}
+@keyframes ping { 0%,100%{box-shadow:0 0 0 3px rgba(174,255,122,0.3);} 50%{box-shadow:0 0 0 8px rgba(174,255,122,0);} }
+
+.hero h1 {
+  font-family: 'Nunito', sans-serif;
+  font-size: clamp(46px, 7vw, 86px);
+  font-weight: 900;
+  color: white;
+  line-height: 1.06;
+  letter-spacing: -2px;
+  margin-bottom: 20px;
+  text-shadow: 0 2px 24px rgba(160,50,0,0.18);
+  animation: fadeUp 0.5s 0.1s ease both;
+}
+
+.hero-sub {
+  font-size: 18px; color: rgba(255,255,255,0.88);
+  max-width: 470px; line-height: 1.65;
+  font-weight: 400; margin-bottom: 44px;
+  animation: fadeUp 0.5s 0.2s ease both;
+}
+
+.waitlist-wrap {
+  display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;
+  max-width: 520px; width: 100%;
+  animation: fadeUp 0.5s 0.3s ease both;
+}
+
+.w-input {
+  flex: 1; min-width: 220px;
+  padding: 16px 22px;
+  border-radius: 100px;
+  border: 2px solid rgba(255,255,255,0.45);
+  background: rgba(255,255,255,0.18);
+  backdrop-filter: blur(12px);
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 15px; font-weight: 500; color: white;
+  outline: none;
+  transition: border 0.2s, background 0.2s;
+}
+.w-input::placeholder { color: rgba(255,255,255,0.6); }
+.w-input:focus { border-color: white; background: rgba(255,255,255,0.26); }
+
+.w-btn {
+  background: white; color: var(--deep-orange);
+  border: none; padding: 16px 28px;
+  border-radius: 100px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 15px; font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.16);
+  transition: all 0.2s; white-space: nowrap;
+}
+.w-btn:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 8px 28px rgba(0,0,0,0.22); }
+
+.w-success {
+  display: none;
+  background: rgba(255,255,255,0.2);
+  border: 2px solid rgba(255,255,255,0.45);
+  border-radius: 100px;
+  padding: 16px 32px;
+  color: white; font-family: 'Nunito', sans-serif;
+  font-size: 15px; font-weight: 800;
+}
+
+.hero-social {
+  margin-top: 18px; color: rgba(255,255,255,0.65);
+  font-size: 13px; font-weight: 500;
+  animation: fadeUp 0.5s 0.4s ease both;
+}
+
+.hero-stats {
+  display: flex; gap: 48px; margin-top: 56px;
+  animation: fadeUp 0.5s 0.5s ease both;
+}
+
+.stat-num {
+  font-family: 'Nunito', sans-serif;
+  font-size: 32px; font-weight: 900; color: white;
+}
+.stat-label { font-size: 12px; color: rgba(255,255,255,0.65); font-weight: 500; margin-top: 3px; }
+
+/* Floating phone */
+.phone-float {
+  position: absolute; right: 6%; top: 50%;
+  transform: translateY(-50%) rotate(3deg);
+  animation: floatPhone 4s ease-in-out infinite;
+}
+@keyframes floatPhone {
+  0%,100%{transform:translateY(-50%) rotate(3deg);}
+  50%{transform:translateY(calc(-50% - 16px)) rotate(3deg);}
+}
+
+.phone {
+  width: 228px; height: 466px;
+  background: #1c1005;
+  border-radius: 38px; padding: 12px;
+  box-shadow: 0 28px 72px rgba(0,0,0,0.42), inset 0 0 0 1px rgba(255,255,255,0.07);
+}
+
+.phone-inner {
+  width: 100%; height: 100%;
+  border-radius: 28px; overflow: hidden;
+  background: var(--grad);
+  position: relative; display: flex; flex-direction: column;
+}
+
+.phone-notch {
+  position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+  width: 70px; height: 20px;
+  background: #1c1005;
+  border-radius: 0 0 13px 13px; z-index: 10;
+}
+
+.app-header {
+  padding: 28px 10px 8px;
+  display: flex; align-items: center; gap: 7px;
+}
+
+.app-filter {
+  width: 30px; height: 30px; flex-shrink: 0;
+  background: rgba(255,255,255,0.2);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px;
+}
+
+.app-search {
+  flex: 1;
+  background: rgba(255,255,255,0.2);
+  border-radius: 100px;
+  padding: 7px 12px;
+  font-size: 10px; color: rgba(255,255,255,0.65);
+  font-family: 'Nunito', sans-serif; font-weight: 600;
+  display: flex; align-items: center; gap: 4px;
+}
+
+.app-notif {
+  width: 30px; height: 30px; flex-shrink: 0;
+  background: rgba(255,255,255,0.2);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; position: relative;
+}
+
+.notif-dot {
+  position: absolute; top: 4px; right: 4px;
+  width: 7px; height: 7px;
+  background: #FF3B30; border-radius: 50%;
+  border: 1.5px solid #1c1005;
+}
+
+.swipe-area { flex: 1; padding: 4px 10px 0; min-height: 0; }
+
+.app-card {
+  width: 100%; height: 100%;
+  border-radius: 20px;
+  background: rgba(140,170,210,0.32);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,0.18);
+  overflow: hidden;
+  display: flex; flex-direction: column;
+}
+
+.app-card-img {
+  flex: 1;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 52px;
+  background: rgba(120,155,205,0.28);
+  transition: opacity 0.25s;
+}
+
+.app-card-footer {
+  padding: 10px 12px;
+  background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 100%);
+}
+
+.app-card-title { font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 800; color: white; }
+.app-card-sub { font-size: 9px; color: rgba(255,255,255,0.7); margin: 2px 0 6px; }
+.app-card-price { font-size: 15px; font-weight: 900; color: #FFCA2E; font-family: 'Nunito', sans-serif; }
+
+.app-actions {
+  display: flex; justify-content: center; gap: 14px;
+  padding: 8px 0 4px;
+}
+
+.app-btn {
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 2px solid; display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 800;
+}
+.btn-x { border-color: var(--red); color: var(--red); background: rgba(224,48,48,0.08); }
+.btn-up { border-color: var(--blue); color: var(--blue); background: rgba(59,126,232,0.08); }
+.btn-d { border-color: var(--green); color: var(--green); background: rgba(45,184,75,0.08); }
+
+.app-nav {
+  background: rgba(255,235,200,0.88);
+  display: flex; padding: 7px 4px 10px;
+  border-radius: 0 0 28px 28px;
+}
+
+.nav-item {
+  flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px;
+  font-size: 7px; font-weight: 700; color: rgba(44,26,14,0.45);
+  font-family: 'Nunito', sans-serif;
+}
+.nav-item.sel { color: var(--deep-orange); }
+.nav-item span:first-child { font-size: 13px; }
+
+.nav-plus {
+  width: 32px; height: 32px;
+  background: var(--deep-orange);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: white; font-size: 18px; font-weight: 900;
+  margin-top: -10px;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(22px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* TICKER */
+.ticker {
+  background: white;
+  border-top: 1.5px solid rgba(255,120,40,0.12);
+  border-bottom: 1.5px solid rgba(255,120,40,0.12);
+  padding: 13px 0; overflow: hidden; white-space: nowrap;
+}
+.ticker-track {
+  display: inline-flex; gap: 44px;
+  animation: tick 20s linear infinite;
+  font-family: 'Nunito', sans-serif;
+  font-size: 13px; font-weight: 800;
+  color: var(--ink); text-transform: uppercase; letter-spacing: 0.01em;
+}
+@keyframes tick { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+.tdot { color: var(--orange); }
+
+/* SECTIONS */
+.section { padding: 96px 40px; }
+.section-inner { max-width: 1100px; margin: 0 auto; }
+
+.pill {
+  display: inline-block;
+  background: rgba(245,96,42,0.1); color: var(--deep-orange);
+  border-radius: 100px; padding: 5px 15px;
+  font-size: 11px; font-weight: 800; letter-spacing: 0.08em;
+  text-transform: uppercase; font-family: 'Nunito', sans-serif;
+  margin-bottom: 16px;
+}
+
+h2 {
+  font-family: 'Nunito', sans-serif;
+  font-size: clamp(34px, 4vw, 52px);
+  font-weight: 900; letter-spacing: -1.5px;
+  line-height: 1.1; margin-bottom: 12px;
+}
+
+.lead {
+  font-size: 17px; color: var(--muted); line-height: 1.65;
+  max-width: 500px; margin-bottom: 48px;
+}
+
+/* HOW IT WORKS */
+.how-section { background: var(--ink); }
+.how-section .pill { background: rgba(255,202,46,0.15); color: var(--yellow); }
+.how-section h2 { color: white; }
+.how-section .lead { color: rgba(255,255,255,0.45); }
+
+.steps { display: grid; grid-template-columns: repeat(4,1fr); gap: 18px; }
+
+.step {
+  background: #1e1207;
+  border: 1px solid rgba(255,130,45,0.13);
+  border-radius: 22px; padding: 26px 20px;
+  transition: transform 0.2s, border-color 0.2s;
+}
+.step:hover { transform: translateY(-5px); border-color: rgba(255,130,45,0.45); }
+
+.step-n {
+  font-family: 'Nunito', sans-serif;
+  font-size: 40px; font-weight: 900;
+  color: rgba(255,120,40,0.18); line-height: 1; margin-bottom: 8px;
+}
+.step-em { font-size: 34px; margin-bottom: 14px; }
+.step h3 { font-family:'Nunito',sans-serif; font-size:16px; font-weight:800; color:white; margin-bottom:7px; }
+.step p { font-size:12px; color:rgba(255,255,255,0.42); line-height:1.6; }
+
+/* FEATURES */
+.feat-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-top: 48px; }
+
+.feat-card {
+  background: white; border-radius: 22px; padding: 30px 24px;
+  border: 1px solid rgba(0,0,0,0.055);
+  box-shadow: 0 2px 14px rgba(245,96,42,0.06);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.feat-card:hover { transform: translateY(-4px); box-shadow: 0 10px 28px rgba(245,96,42,0.11); }
+.feat-card.hi { background: var(--grad); border: none; }
+.feat-card.hi h3, .feat-card.hi p { color: white; }
+.feat-card.hi p { opacity: 0.82; }
+
+.feat-em { font-size: 36px; margin-bottom: 16px; }
+.feat-card h3 { font-family:'Nunito',sans-serif; font-size:18px; font-weight:800; margin-bottom:8px; }
+.feat-card p { font-size:13px; color:var(--muted); line-height:1.6; }
+
+/* TESTIMONIALS */
+.testi-section { background: #FFF4E8; }
+
+.testi-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-top: 48px; }
+
+.testi-card {
+  background: white; border-radius: 22px; padding: 26px;
+  border: 1px solid rgba(0,0,0,0.055);
+  box-shadow: 0 2px 12px rgba(245,96,42,0.055);
+  transition: transform 0.2s;
+}
+.testi-card:hover { transform: translateY(-3px); }
+.testi-card.hi { background: var(--grad); border: none; }
+.testi-card.hi .testi-q, .testi-card.hi .testi-who { color: white; }
+.testi-card.hi .stars { color: #FFCA2E; }
+
+.stars { color: var(--orange); font-size: 13px; margin-bottom: 13px; }
+.testi-q { font-size: 14px; line-height: 1.65; font-style: italic; font-weight: 400; color: var(--ink); margin-bottom: 16px; }
+.testi-who { font-size: 12px; color: var(--muted); font-weight: 600; }
+
+/* BIG WAITLIST */
+.wl-section {
+  background: var(--grad);
+  text-align: center; padding: 120px 40px;
+  position: relative; overflow: hidden;
+}
+.wl-section h2 { color: white; margin-bottom: 12px; }
+.wl-section .lead { color: rgba(255,255,255,0.8); margin: 0 auto 40px; }
+
+.big-form {
+  display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+  max-width: 540px; margin: 0 auto;
+}
+
+.big-input {
+  flex: 1; min-width: 240px;
+  padding: 18px 26px; border-radius: 100px;
+  border: 2px solid rgba(255,255,255,0.45);
+  background: rgba(255,255,255,0.18); backdrop-filter: blur(12px);
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 16px; font-weight: 500; color: white; outline: none;
+  transition: border 0.2s, background 0.2s;
+}
+.big-input::placeholder { color: rgba(255,255,255,0.6); }
+.big-input:focus { border-color: white; background: rgba(255,255,255,0.25); }
+
+.big-btn {
+  background: white; color: var(--deep-orange);
+  border: none; padding: 18px 32px; border-radius: 100px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 16px; font-weight: 900; cursor: pointer;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.16);
+  transition: all 0.2s; white-space: nowrap;
+}
+.big-btn:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 10px 32px rgba(0,0,0,0.22); }
+
+.wl-success {
+  display: none;
+  background: rgba(255,255,255,0.2);
+  border: 2px solid rgba(255,255,255,0.4);
+  border-radius: 100px; padding: 18px 40px;
+  color: white; font-family: 'Nunito', sans-serif;
+  font-size: 16px; font-weight: 800;
+  max-width: 440px; margin: 0 auto;
+}
+
+.wl-count { margin-top: 18px; color: rgba(255,255,255,0.65); font-size: 14px; font-weight: 500; }
+
+/* FOOTER */
+footer {
+  background: var(--ink); color: white;
+  padding: 52px 40px;
+  display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;
+}
+.f-logo {
+  font-family: 'Nunito', sans-serif; font-size: 24px; font-weight: 900;
+  background: var(--grad);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.f-links { display: flex; gap: 22px; }
+.f-links a { color: rgba(255,255,255,0.4); font-size: 14px; font-weight: 500; text-decoration: none; transition: color 0.2s; }
+.f-links a:hover { color: var(--yellow); }
+.f-copy { font-size: 13px; color: rgba(255,255,255,0.28); }
+
+/* Reveal */
+.reveal { opacity: 0; transform: translateY(26px); transition: opacity 0.55s, transform 0.55s; }
+.reveal.on { opacity: 1; transform: none; }
+
+@media (max-width: 960px) {
+  .phone-float { display: none; }
+  .steps { grid-template-columns: repeat(2,1fr); }
+  .feat-grid { grid-template-columns: repeat(2,1fr); }
+  .testi-grid { grid-template-columns: 1fr; }
+  nav ul { display: none; }
+}
+@media (max-width: 500px) {
+  .steps, .feat-grid { grid-template-columns: 1fr; }
+  .hero-stats { gap: 28px; }
+  .section { padding: 72px 20px; }
+  nav { padding: 14px 20px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Swapz</div>
+  <ul>
+    <li><a href="#how">How it works</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#waitlist" class="nav-cta">Join waitlist 🔥</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="bubble b1"></div>
+  <div class="bubble b2"></div>
+  <div class="bubble b3"></div>
+
+  <div class="phone-float">
+    <div class="phone">
+      <div class="phone-inner">
+        <div class="phone-notch"></div>
+        <div class="app-header">
+          <div class="app-filter">⚙️</div>
+          <div class="app-search">🔍 Search...</div>
+          <div class="app-notif">🔔<span class="notif-dot"></span></div>
+        </div>
+        <div class="swipe-area">
+          <div class="app-card">
+            <div class="app-card-img" id="cardEmoji">👖</div>
+            <div class="app-card-footer">
+              <div class="app-card-title" id="cardTitle">Vintage Levi's 501</div>
+              <div class="app-card-sub" id="cardSub">Size 28 · Women's · @maya_ucsd</div>
+              <div class="app-card-price" id="cardPrice">$45</div>
+            </div>
+            <div class="app-actions">
+              <div class="app-btn btn-x">✕</div>
+              <div class="app-btn btn-up">↑</div>
+              <div class="app-btn btn-d">$</div>
+            </div>
+          </div>
+        </div>
+        <div class="app-nav">
+          <div class="nav-item sel"><span>👕</span><span>Discover</span></div>
+          <div class="nav-item"><span>🤍</span><span>Saved</span></div>
+          <div class="nav-item"><div class="nav-plus">+</div><span>List</span></div>
+          <div class="nav-item"><span>💬</span><span>Chat</span></div>
+          <div class="nav-item"><span>👤</span><span>Profile</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-badge"><span class="live-dot"></span> UCSD students only</div>
+  <h1>Your next fit is<br>already on campus</h1>
+  <p class="hero-sub">Swipe on secondhand clothes from fellow Tritons. Swap, sell, and score deals — no shipping, no strangers.</p>
+
+  <div class="waitlist-wrap" id="heroWrap">
+    <input class="w-input" type="email" placeholder="your@ucsd.edu" id="heroEmail">
+    <button class="w-btn" onclick="join('heroEmail','heroOk','heroWrap')">Get early access →</button>
+  </div>
+  <div class="w-success" id="heroOk">🎉 You're on the list! We'll hit you when Swapz drops.</div>
+  <p class="hero-social" id="heroCount">🔥 800+ UCSD students already waiting</p>
+
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">800+</div><div class="stat-label">Waitlist signups</div></div>
+    <div class="stat"><div class="stat-num">UCSD</div><div class="stat-label">Campus only</div></div>
+    <div class="stat"><div class="stat-num">$0</div><div class="stat-label">To download</div></div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-track">
+    <span>Swap your fits</span><span class="tdot"> ✦ </span>
+    <span>UCSD only</span><span class="tdot"> ✦ </span>
+    <span>Zero shipping</span><span class="tdot"> ✦ </span>
+    <span>Drip without the damage</span><span class="tdot"> ✦ </span>
+    <span>The whole campus is your closet</span><span class="tdot"> ✦ </span>
+    <span>Sustainable fashion</span><span class="tdot"> ✦ </span>
+    <span>Swap your fits</span><span class="tdot"> ✦ </span>
+    <span>UCSD only</span><span class="tdot"> ✦ </span>
+    <span>Zero shipping</span><span class="tdot"> ✦ </span>
+    <span>Drip without the damage</span><span class="tdot"> ✦ </span>
+    <span>The whole campus is your closet</span><span class="tdot"> ✦ </span>
+    <span>Sustainable fashion</span><span class="tdot"> ✦ </span>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="how-section section" id="how">
+  <div class="section-inner">
+    <div class="pill">How it works</div>
+    <h2>From listing to<br>new fit in minutes</h2>
+    <p class="lead">Four steps and you've got a fresh piece from someone down the hall.</p>
+    <div class="steps">
+      <div class="step reveal"><div class="step-n">01</div><div class="step-em">📸</div><h3>List your clothes</h3><p>Snap a photo, set your price or mark it as swap-only. 30 seconds flat.</p></div>
+      <div class="step reveal"><div class="step-n">02</div><div class="step-em">👆</div><h3>Swipe the feed</h3><p>✕ to pass, ↑ to offer, $ to buy. Tinder-style but make it fashion.</p></div>
+      <div class="step reveal"><div class="step-n">03</div><div class="step-em">🤝</div><h3>Match & chat</h3><p>Mutual interest unlocks chat. Negotiate and sort the details in-app.</p></div>
+      <div class="step reveal"><div class="step-n">04</div><div class="step-em">📍</div><h3>Meet on campus</h3><p>Price Center, the library, your dorm — exchange wherever works for you both.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="section" id="features" style="background:var(--cream);">
+  <div class="section-inner">
+    <div class="pill">Features</div>
+    <h2>Built different,<br>for Tritons</h2>
+    <div class="feat-grid">
+      <div class="feat-card hi reveal"><div class="feat-em">🎓</div><h3>UCSD verified only</h3><p>Sign in with your @ucsd.edu email. Every person on the app is a real student.</p></div>
+      <div class="feat-card reveal"><div class="feat-em">💬</div><h3>Match-gated chat</h3><p>Chat only opens on mutual interest — no random DMs, no creeps.</p></div>
+      <div class="feat-card reveal"><div class="feat-em">♻️</div><h3>Swap, not just sell</h3><p>Offer one of your items instead of cash. Circular fashion at its best.</p></div>
+      <div class="feat-card reveal"><div class="feat-em">📍</div><h3>No shipping, ever</h3><p>Everyone's on campus. Meet in person and skip the shipping fee forever.</p></div>
+      <div class="feat-card reveal"><div class="feat-em">⭐</div><h3>Seller ratings</h3><p>Rate every exchange. Build trust and rep with your campus community.</p></div>
+      <div class="feat-card reveal"><div class="feat-em">🔥</div><h3>Trending on campus</h3><p>See what's hot right now. Filter by size, category, or price in seconds.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testi-section section">
+  <div class="section-inner">
+    <div class="pill">What students say</div>
+    <h2>Real swaps,<br>real Tritons</h2>
+    <div class="testi-grid">
+      <div class="testi-card reveal"><div class="stars">★★★★★</div><p class="testi-q">"Got a Patagonia fleece for $20 from someone two doors down in my dorm. This app is genuinely insane."</p><div class="testi-who">@alex.revelle · Eleanor Roosevelt</div></div>
+      <div class="testi-card hi reveal"><div class="stars">★★★★★</div><p class="testi-q">"Cleared out my whole closet before summer and made $200. Listing each item took like two minutes."</p><div class="testi-who">@priya_warren · Warren College</div></div>
+      <div class="testi-card reveal"><div class="stars">★★★★★</div><p class="testi-q">"Traded my old jacket for Air Forces I'd been wanting for months. No money changed hands. This is the future."</p><div class="testi-who">@mikey.sixth · Sixth College</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- WAITLIST CTA -->
+<section class="wl-section" id="waitlist">
+  <div class="bubble b1"></div>
+  <div class="bubble b2"></div>
+  <h2>Be first when<br>Swapz drops.</h2>
+  <p class="lead">Drop your UCSD email and we'll hit you the moment the app goes live. No spam, just the drop.</p>
+  <div class="big-form" id="bigWrap">
+    <input class="big-input" type="email" placeholder="your@ucsd.edu" id="bigEmail">
+    <button class="big-btn" onclick="join('bigEmail','bigOk','bigWrap')">Join the waitlist 🔥</button>
+  </div>
+  <div class="wl-success" id="bigOk">🎉 You're on the list! First to know when we launch.</div>
+  <p class="wl-count">🔥 800+ UCSD students already waiting</p>
+</section>
+
+<footer>
+  <div class="f-logo">Swapz</div>
+  <div class="f-links">
+    <a href="#">Instagram</a>
+    <a href="#">Privacy</a>
+    <a href="#">Terms</a>
+    <a href="mailto:hello@swapz.app">Contact</a>
+  </div>
+  <div class="f-copy">© 2026 Swapz · Made at UCSD 🔱</div>
+</footer>
+
+<script>
+function join(inputId, successId, wrapId) {
+  const v = document.getElementById(inputId).value.trim();
+  if (!v || !v.includes('@')) {
+    const el = document.getElementById(inputId);
+    el.style.borderColor = 'rgba(255,100,100,0.8)';
+    el.focus();
+    setTimeout(() => el.style.borderColor = '', 1500);
+    return;
+  }
+  document.getElementById(wrapId).style.display = 'none';
+  document.getElementById(successId).style.display = 'block';
+  // sync both forms
+  ['heroWrap','bigWrap'].forEach(id => { const el = document.getElementById(id); if(el) el.style.display='none'; });
+  ['heroOk','bigOk'].forEach(id => { const el = document.getElementById(id); if(el) el.style.display='block'; });
+  const c = document.getElementById('heroCount'); if(c) c.textContent = '✅ You\'re in! See you when we launch.';
+}
+
+document.getElementById('heroEmail').addEventListener('keydown', e => { if(e.key==='Enter') join('heroEmail','heroOk','heroWrap'); });
+document.getElementById('bigEmail').addEventListener('keydown', e => { if(e.key==='Enter') join('bigEmail','bigOk','bigWrap'); });
+
+// Reveal on scroll
+const obs = new IntersectionObserver(entries => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) { setTimeout(() => e.target.classList.add('on'), i * 90); obs.unobserve(e.target); }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+// Cycle phone cards
+const cards = [
+  { emoji:'👖', title:"Vintage Levi's 501", sub:"Size 28 · Women's · @maya_ucsd", price:'$45' },
+  { emoji:'🧥', title:'Patagonia Fleece', sub:"Size M · Unisex · @alex.revelle", price:'$38' },
+  { emoji:'👟', title:'Nike Dunk Low', sub:"Size 9 · Men's · @kai.triton", price:'$60' },
+  { emoji:'👜', title:'Mini Canvas Tote', sub:"One size · @priya_w", price:'$12' },
+  { emoji:'🕶️', title:'Vintage Sunglasses', sub:"Unisex · @sam.sixth", price:'$18' },
+];
+let ci = 0;
+setInterval(() => {
+  ci = (ci + 1) % cards.length;
+  const img = document.getElementById('cardEmoji');
+  if (!img) return;
+  img.style.opacity = '0';
+  setTimeout(() => {
+    const c = cards[ci];
+    img.textContent = c.emoji;
+    document.getElementById('cardTitle').textContent = c.title;
+    document.getElementById('cardSub').textContent = c.sub;
+    document.getElementById('cardPrice').textContent = c.price;
+    img.style.opacity = '1';
+  }, 260);
+}, 2800);
+</script>
+</body>
+</html>
