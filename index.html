@@ -662,7 +662,7 @@ footer {
 <footer>
   <div class="f-logo">Swapz</div>
   <div class="f-links">
-    <a href="#">Instagram</a>
+    <a href="https://www.instagram.com/swapzatucsd/" target="_blank">Instagram</a>
     <a href="#">Privacy</a>
     <a href="#">Terms</a>
     <a href="mailto:hello@swapz.app">Contact</a>
@@ -671,21 +671,53 @@ footer {
 </footer>
 
 <script>
-function join(inputId, successId, wrapId) {
-  const v = document.getElementById(inputId).value.trim();
+const LOOPS_URL = 'https://app.loops.so/api/newsletter-form/cmp78casd070z0j1gibrtlx1e';
+
+async function join(inputId, successId, wrapId) {
+  const el = document.getElementById(inputId);
+  const v = el.value.trim();
   if (!v || !v.includes('@')) {
-    const el = document.getElementById(inputId);
     el.style.borderColor = 'rgba(255,100,100,0.8)';
     el.focus();
     setTimeout(() => el.style.borderColor = '', 1500);
     return;
   }
-  document.getElementById(wrapId).style.display = 'none';
-  document.getElementById(successId).style.display = 'block';
-  // sync both forms
-  ['heroWrap','bigWrap'].forEach(id => { const el = document.getElementById(id); if(el) el.style.display='none'; });
-  ['heroOk','bigOk'].forEach(id => { const el = document.getElementById(id); if(el) el.style.display='block'; });
-  const c = document.getElementById('heroCount'); if(c) c.textContent = '✅ You\'re in! See you when we launch.';
+
+  // Rate limit check
+  const prev = localStorage.getItem('swapz-wl-ts');
+  const now = Date.now();
+  if (prev && Number(prev) + 60000 > now) {
+    showSuccess(); return;
+  }
+  localStorage.setItem('swapz-wl-ts', now);
+
+  // Show loading state on both buttons
+  document.querySelectorAll('.w-btn, .big-btn').forEach(b => {
+    b.textContent = 'Joining...'; b.disabled = true;
+  });
+
+  try {
+    await fetch(LOOPS_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: 'userGroup=&mailingLists=&email=' + encodeURIComponent(v),
+    });
+  } catch(e) {}
+
+  showSuccess();
+}
+
+function showSuccess() {
+  ['heroWrap','bigWrap'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
+  ['heroOk','bigOk'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'block';
+  });
+  const c = document.getElementById('heroCount');
+  if (c) c.textContent = "✅ You're in! See you when we launch.";
 }
 
 document.getElementById('heroEmail').addEventListener('keydown', e => { if(e.key==='Enter') join('heroEmail','heroOk','heroWrap'); });
