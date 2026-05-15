@@ -511,6 +511,14 @@ footer {
   .section { padding: 72px 20px; }
   nav { padding: 14px 20px; }
 }
+
+@keyframes shake {
+  0%,100%{transform:translateX(0);}
+  20%{transform:translateX(-6px);}
+  40%{transform:translateX(6px);}
+  60%{transform:translateX(-4px);}
+  80%{transform:translateX(4px);}
+}
 </style>
 </head>
 <body>
@@ -569,9 +577,16 @@ footer {
   <h1>Your next fit is<br>already on campus</h1>
   <p class="hero-sub">Swipe on secondhand clothes from fellow Tritons. Swap, sell, and score deals — no shipping, no strangers.</p>
 
-  <div class="waitlist-wrap" id="heroWrap">
-    <input class="w-input" type="email" placeholder="your@ucsd.edu" id="heroEmail">
-    <button class="w-btn" onclick="join('heroEmail','heroOk','heroWrap')">Get early access →</button>
+  <div class="waitlist-wrap" id="heroWrap" style="flex-direction:column;align-items:center;gap:10px;">
+    <div style="display:flex;gap:10px;width:100%;max-width:520px;flex-wrap:wrap;justify-content:center;">
+      <input class="w-input" type="text" placeholder="First name" id="heroName" style="flex:1;min-width:140px;">
+      <input class="w-input" type="tel" placeholder="Phone number" id="heroPhone" style="flex:1;min-width:140px;">
+    </div>
+    <div style="display:flex;gap:10px;width:100%;max-width:520px;flex-wrap:wrap;justify-content:center;">
+      <input class="w-input" type="email" placeholder="your@ucsd.edu" id="heroEmail" style="flex:1;min-width:200px;">
+      <button class="w-btn" onclick="joinForm('hero')">Get early access →</button>
+    </div>
+    <div id="heroErr" style="color:rgba(255,255,255,0.9);font-size:13px;font-weight:600;display:none;"></div>
   </div>
   <div class="w-success" id="heroOk">🎉 You're on the list! We'll hit you when Swapz drops.</div>
   <p class="hero-social" id="heroCount">🔥 800+ UCSD students already waiting</p>
@@ -651,9 +666,16 @@ footer {
   <div class="bubble b2"></div>
   <h2>Be first when<br>Swapz drops.</h2>
   <p class="lead">Drop your UCSD email and we'll hit you the moment the app goes live. No spam, just the drop.</p>
-  <div class="big-form" id="bigWrap">
-    <input class="big-input" type="email" placeholder="your@ucsd.edu" id="bigEmail">
-    <button class="big-btn" onclick="join('bigEmail','bigOk','bigWrap')">Join the waitlist 🔥</button>
+  <div class="big-form" id="bigWrap" style="flex-direction:column;align-items:center;gap:12px;">
+    <div style="display:flex;gap:12px;width:100%;max-width:540px;flex-wrap:wrap;justify-content:center;">
+      <input class="big-input" type="text" placeholder="First name" id="bigName" style="flex:1;min-width:150px;">
+      <input class="big-input" type="tel" placeholder="Phone number" id="bigPhone" style="flex:1;min-width:150px;">
+    </div>
+    <div style="display:flex;gap:12px;width:100%;max-width:540px;flex-wrap:wrap;justify-content:center;">
+      <input class="big-input" type="email" placeholder="your@ucsd.edu" id="bigEmail" style="flex:1;min-width:220px;">
+      <button class="big-btn" onclick="joinForm('big')">Join the waitlist 🔥</button>
+    </div>
+    <div id="bigErr" style="color:rgba(255,255,255,0.9);font-size:14px;font-weight:600;display:none;"></div>
   </div>
   <div class="wl-success" id="bigOk">🎉 You're on the list! First to know when we launch.</div>
   <p class="wl-count">🔥 800+ UCSD students already waiting</p>
@@ -673,25 +695,53 @@ footer {
 <script>
 const LOOPS_URL = 'https://app.loops.so/api/newsletter-form/cmp78casd070z0j1gibrtlx1e';
 
-async function join(inputId, successId, wrapId) {
-  const el = document.getElementById(inputId);
-  const v = el.value.trim();
-  if (!v || !v.includes('@')) {
-    el.style.borderColor = 'rgba(255,100,100,0.8)';
-    el.focus();
-    setTimeout(() => el.style.borderColor = '', 1500);
+function shake(el) {
+  el.style.borderColor = 'rgba(255,100,100,0.85)';
+  el.style.animation = 'shake 0.35s ease';
+  setTimeout(() => { el.style.borderColor = ''; el.style.animation = ''; }, 800);
+}
+
+function showErr(prefix, msg) {
+  const el = document.getElementById(prefix + 'Err');
+  if (!el) return;
+  el.textContent = msg;
+  el.style.display = 'block';
+  setTimeout(() => { el.style.display = 'none'; }, 3000);
+}
+
+async function joinForm(prefix) {
+  const name  = document.getElementById(prefix + 'Name').value.trim();
+  const phone = document.getElementById(prefix + 'Phone').value.trim();
+  const email = document.getElementById(prefix + 'Email').value.trim();
+
+  // Validation
+  if (!name || name.length < 2) {
+    shake(document.getElementById(prefix + 'Name'));
+    showErr(prefix, 'Please enter your first name.');
+    document.getElementById(prefix + 'Name').focus();
+    return;
+  }
+  const phoneDigits = phone.replace(/\D/g, '');
+  if (!phone || phoneDigits.length < 7) {
+    shake(document.getElementById(prefix + 'Phone'));
+    showErr(prefix, 'Please enter a valid phone number.');
+    document.getElementById(prefix + 'Phone').focus();
+    return;
+  }
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    shake(document.getElementById(prefix + 'Email'));
+    showErr(prefix, 'Please enter a valid email address.');
+    document.getElementById(prefix + 'Email').focus();
     return;
   }
 
-  // Rate limit check
+  // Rate limit
   const prev = localStorage.getItem('swapz-wl-ts');
   const now = Date.now();
-  if (prev && Number(prev) + 60000 > now) {
-    showSuccess(); return;
-  }
+  if (prev && Number(prev) + 60000 > now) { showSuccess(); return; }
   localStorage.setItem('swapz-wl-ts', now);
 
-  // Show loading state on both buttons
+  // Loading state
   document.querySelectorAll('.w-btn, .big-btn').forEach(b => {
     b.textContent = 'Joining...'; b.disabled = true;
   });
@@ -700,7 +750,9 @@ async function join(inputId, successId, wrapId) {
     await fetch(LOOPS_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: 'userGroup=&mailingLists=&email=' + encodeURIComponent(v),
+      body: 'userGroup=&mailingLists=&firstName=' + encodeURIComponent(name)
+          + '&phone=' + encodeURIComponent(phone)
+          + '&email=' + encodeURIComponent(email),
     });
   } catch(e) {}
 
@@ -708,20 +760,14 @@ async function join(inputId, successId, wrapId) {
 }
 
 function showSuccess() {
-  ['heroWrap','bigWrap'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.style.display = 'none';
-  });
-  ['heroOk','bigOk'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.style.display = 'block';
-  });
+  ['heroWrap','bigWrap'].forEach(id => { const el = document.getElementById(id); if(el) el.style.display='none'; });
+  ['heroOk','bigOk'].forEach(id => { const el = document.getElementById(id); if(el) el.style.display='block'; });
   const c = document.getElementById('heroCount');
-  if (c) c.textContent = "✅ You're in! See you when we launch.";
+  if(c) c.textContent = "✅ You're in! See you when we launch.";
 }
 
-document.getElementById('heroEmail').addEventListener('keydown', e => { if(e.key==='Enter') join('heroEmail','heroOk','heroWrap'); });
-document.getElementById('bigEmail').addEventListener('keydown', e => { if(e.key==='Enter') join('bigEmail','bigOk','bigWrap'); });
+document.getElementById('heroEmail').addEventListener('keydown', e => { if(e.key==='Enter') joinForm('hero'); });
+document.getElementById('bigEmail').addEventListener('keydown', e => { if(e.key==='Enter') joinForm('big'); });
 
 // Reveal on scroll
 const obs = new IntersectionObserver(entries => {
